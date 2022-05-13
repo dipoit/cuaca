@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuaca</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="city"></div>
+
+    <div class="list row p-5">
+        
+    </div>
+
+    
+
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var url = "https://api.openweathermap.org/data/2.5/forecast?lat=3.566854&lon=98.659142&appid=fdcf11dcabadafb1776f44b374c0162a";
+
+        $.getJSON(url,
+            function (data) {
+                console.log(data)
+
+                //nama kota
+                console.log(data.city.name)
+
+                //list cuaca
+                console.log(data.list[0].weather[0]);
+
+                // console.log(data.list.weather[0].icon);
+                // console.log(data.list.weather[0].main);
+                
+                var list = "";
+
+                $.each(data.list, function (index, value) { 
+                    var temp = value.main.temp - 273.15;
+                    temp = temp.toFixed(0);
+                    var timestamp = value.dt;
+                    var d = new Date(value.dt_txt);
+                    var date = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' ' + String(d.getHours()).padStart(2, '0') + ':'+ String(d.getMinutes()).padStart(2, '0');
+
+                    list = list + '<div class="col-md-3 p-3"><div class="card text-center m-0 p-0"><div class="card-body" ><img src="http://openweathermap.org/img/wn/'+ value.weather[0].icon +'@2x.png"><h3 class="card-title">'+ temp +' ℃</h3><p class="card-text">'+ value.weather[0].description +'</p></div><div class="card-footer text-muted">'+ date +'</div></div></div>'
+                });
+
+                $('.list').html(list);
+            }
+        );
+      
+</script>
+</body>
+</html>
